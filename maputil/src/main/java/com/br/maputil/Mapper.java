@@ -72,9 +72,9 @@ public class Mapper {
 
     public MarkerOptions getMarker(@NonNull MapMarker mapMarker, boolean draggable, @DrawableRes int markerIcon) {
         Location location = mapMarker.getLocation();
-        Bitmap markerBitmapFromView = getFromView(markerIcon);
+        Bitmap bitmap = getFromView(markerIcon);
 
-        return new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(mapMarker.getTitle()).snippet(mapMarker.getSnippet()).icon(BitmapDescriptorFactory.fromBitmap(markerBitmapFromView)).draggable(draggable).anchor(0.5f, 0.5f).flat(true);
+        return new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(mapMarker.getTitle()).snippet(mapMarker.getSnippet()).icon(BitmapDescriptorFactory.fromBitmap(bitmap)).draggable(draggable).anchor(0.5f, 0.5f).flat(true);
     }
 
     public void clear(@NonNull Marker marker) {
@@ -151,28 +151,6 @@ public class Mapper {
 
         ImageView imageView = view.findViewById(R.id.mapMarker_imageView);
         imageView.setImageResource(resId);
-
-        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-
-        Drawable drawable = view.getBackground();
-        if (Validator.isValid(drawable))
-            drawable.draw(canvas);
-
-        view.draw(canvas);
-
-        return bitmap;
-    }
-
-    public Bitmap getFromView(@NonNull Bitmap imageBitmap) {
-        View view = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_map_marker, null);
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-
-        ImageView imageView = view.findViewById(R.id.mapMarker_imageView);
-        imageView.setImageBitmap(imageBitmap);
 
         Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
